@@ -23,7 +23,7 @@ public class BallController : MonoBehaviour
         if (!gameStarted)
         {
             // Coloca la bola sobre la plataforma
-            transform.position = new Vector2(GameObject.Find("Platform").transform.position.x, -3.5f);
+            transform.position = new Vector2(GameObject.Find("Platform").transform.position.x, -2.5f);
 
             // Lanza la bola después de 2 segundos
             if (Time.time > 2f)

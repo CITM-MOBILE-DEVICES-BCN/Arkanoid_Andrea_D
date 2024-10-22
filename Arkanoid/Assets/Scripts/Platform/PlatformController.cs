@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlatformController : MonoBehaviour
 {
@@ -8,12 +9,12 @@ public class PlatformController : MonoBehaviour
     public float autoSpeed = 8f;           // Velocidad en modo automático
     public bool autoMode = false;          // Alternar entre modo manual y automático
     public GameObject ball;                // Referencia a la pelota
-    
+
     private float screenHalfWidthInWorldUnits;
 
     void Start()
     {
-       
+
         // Calculamos la mitad de la pantalla en unidades del mundo para limitar el movimiento
         float halfPlatformWidth = transform.localScale.x / 2f;
         screenHalfWidthInWorldUnits = Camera.main.aspect * Camera.main.orthographicSize - halfPlatformWidth;
@@ -51,7 +52,7 @@ public class PlatformController : MonoBehaviour
 
             // Aplicar el movimiento a la plataforma
             transform.position = new Vector2(targetX, transform.position.y);
-         
+
 
         }
     }

@@ -417,8 +417,8 @@ MonoBehaviour:
   blockPrefab: {fileID: 2514773818130892612, guid: 785316f8f03fcc64783baf0386cefa42, type: 3}
   rows: 5
   columns: 12
-  xOffset: 0.8
-  yOffset: 0.8
+  xOffset: 1.1
+  yOffset: 0.6
   blockSpacing: 1
   blockResistances: 010000000200000003000000
 --- !u!4 &215847151
@@ -1401,7 +1401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6493130964362887501, guid: fd253abac6ed40e42b97bf920861fd34, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 6493130964362887501, guid: fd253abac6ed40e42b97bf920861fd34, type: 3}
       propertyPath: m_LocalPosition.z
