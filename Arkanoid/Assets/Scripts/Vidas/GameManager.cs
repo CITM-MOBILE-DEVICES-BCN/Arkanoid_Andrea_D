@@ -17,25 +17,26 @@ public class GameManager : MonoBehaviour
     public GameObject ballPrefab;           // Prefab de la pelota
     public Transform platform;               // La plataforma para resetear su posición
     private GameObject currentBall;          // Referencia a la pelota actual
-    private ScreenOrientation currentOrientation;
-    private int currentLevel = 0;
+    private int currentLevel;
     public int currentblocks;
-    private int totalblocks;
+    private SaveLoadSystem SLSystem;
+    private int maxLvlIterator = 1;
+    private bool newGame;
+
     void Start()
-    {
-        currentOrientation = Screen.orientation;
-        UpdateLives();
-        UpdateScore();
-        UpdateHighScore();
+    { 
         currentBall = GameObject.FindGameObjectWithTag("Ball");
         GameObject[] bricks = GameObject.FindGameObjectsWithTag("Brick");
-        totalblocks = bricks.Length;
         currentblocks = bricks.Length;
+        SLSystem = GetComponent<SaveLoadSystem>();
+        CheckGameState();
     }
 
     void Update()
     {
+        UpdateLives();
         UpdateScore();
+        UpdateHighScore();
         // Comprobar si la pelota ha salido por la parte inferior de la pantalla
         if (currentBall != null && currentBall.transform.position.y < -5.0f)
         {
@@ -44,16 +45,16 @@ public class GameManager : MonoBehaviour
 
         if(currentblocks == 0)
         {
-            if (currentLevel == 0)
+            if(currentLevel == maxLvlIterator)
+            {
+                currentLevel = 0;
+            }
+            else
             {
                 currentLevel++;
-                SceneManager.LoadScene("Level2");
             }
-            else if(currentLevel == 1)
-            {
-                currentLevel--;
-                SceneManager.LoadScene("Level1");
-            }
+            SaveGame();
+            LoadScene();
         }
     }
 
@@ -61,7 +62,6 @@ public class GameManager : MonoBehaviour
     void LoseLife()
     {
         lives--;
-        UpdateLives();
         if (lives > 0)
         {
             // Si quedan vidas, volver a generar la pelota
@@ -83,13 +83,9 @@ public class GameManager : MonoBehaviour
     // Método para manejar el Game Over
     void GameOver()
     {
-        if(highScore < points)
-        {
-            highScore = points;
-            UpdateScore();
-        }
-        Debug.Log("Game Over!");  // Aquí puedes añadir una pantalla de Game Over o reiniciar el nivel
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reiniciar la escena para reiniciar el juego
+        newGame = true;
+        SaveGame();
+        SceneManager.LoadScene("Menu"); // Reiniciar la escena para reiniciar el juego
     }
 
     public void UpdateLives()
@@ -106,7 +102,72 @@ public class GameManager : MonoBehaviour
     // Método para actualizar el high score en el HUD
     public void UpdateHighScore()
     {
+        if (highScore < points)
+        {
+            highScore = points;
+        }
         highScoreText.text = "High Score: " + highScore.ToString();
-
     }
+
+    private void SaveGame()
+    {
+        PlayerData data = new PlayerData();
+        data.lives = this.lives;
+        data.points = this.points;
+        data.highScore = this.highScore;
+        data.currentlvl = this.currentLevel;
+        data.newGame = this.newGame;
+        SLSystem.SaveData(data);
+    }
+
+    private void LoadGame()
+    {
+        PlayerData data = SLSystem.LoadData();
+        if (data != null)
+        {
+            this.lives = data.lives;
+            this.points = data.points;
+            this.highScore = data.highScore;
+            this.currentLevel = data.currentlvl;
+            this.newGame = data.newGame;
+        }
+    }
+
+    public void LoadScene()
+    {
+        if (currentLevel == 0)
+        {
+            SceneManager.LoadScene("Level1");
+        }
+        else if (currentLevel == 1)
+        {
+            SceneManager.LoadScene("Level2");
+        }
+    }
+
+    public void CheckGameState()
+    {
+        PlayerData data = SLSystem.LoadData();
+        if (data != null)
+        {
+            if (data.newGame)
+            {
+                StartNewGame();
+            }
+            else
+            {
+                LoadGame();
+            }
+            newGame = false;
+        }
+    }
+
+    public void StartNewGame()
+    {
+        LoadGame();
+        currentLevel = 0;
+        points = 0;
+        lives = 3;
+    }
+
 }
