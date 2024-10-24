@@ -43,6 +43,7 @@ public class Brick : MonoBehaviour
         if (currentResistance <= 0)
         {
             gmScript.points += 10;
+            gmScript.currentblocks -= 1;
             DestroyBlock();
         }
         else

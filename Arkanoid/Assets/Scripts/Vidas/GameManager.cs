@@ -18,7 +18,9 @@ public class GameManager : MonoBehaviour
     public Transform platform;               // La plataforma para resetear su posición
     private GameObject currentBall;          // Referencia a la pelota actual
     private ScreenOrientation currentOrientation;
-
+    private int currentLevel = 0;
+    public int currentblocks;
+    private int totalblocks;
     void Start()
     {
         currentOrientation = Screen.orientation;
@@ -26,6 +28,9 @@ public class GameManager : MonoBehaviour
         UpdateScore();
         UpdateHighScore();
         currentBall = GameObject.FindGameObjectWithTag("Ball");
+        GameObject[] bricks = GameObject.FindGameObjectsWithTag("Brick");
+        totalblocks = bricks.Length;
+        currentblocks = bricks.Length;
     }
 
     void Update()
@@ -36,11 +41,19 @@ public class GameManager : MonoBehaviour
         {
             LoseLife();
         }
-        // Detectar si la orientación cambia
-        if (Screen.orientation != currentOrientation)
+
+        if(currentblocks == 0)
         {
-            currentOrientation = Screen.orientation;
-            HandleOrientationChange();
+            if (currentLevel == 0)
+            {
+                currentLevel++;
+                SceneManager.LoadScene("Level2");
+            }
+            else if(currentLevel == 1)
+            {
+                currentLevel--;
+                SceneManager.LoadScene("Level1");
+            }
         }
     }
 
@@ -95,19 +108,5 @@ public class GameManager : MonoBehaviour
     {
         highScoreText.text = "High Score: " + highScore.ToString();
 
-    }
-
-    void HandleOrientationChange()
-    {
-        if (Screen.orientation == ScreenOrientation.Portrait || Screen.orientation == ScreenOrientation.PortraitUpsideDown)
-        {
-            // Aquí puedes ajustar el HUD o cualquier otro elemento para modo vertical
-            Debug.Log("Cambiado a Portrait");
-        }
-        else if (Screen.orientation == ScreenOrientation.LandscapeLeft || Screen.orientation == ScreenOrientation.LandscapeRight)
-        {
-            // Aquí puedes ajustar el HUD o cualquier otro elemento para modo horizontal
-            Debug.Log("Cambiado a Landscape");
-        }
     }
 }
