@@ -8,8 +8,9 @@ public class BallController : MonoBehaviour
     public float speed = 5f;         // Velocidad inicial de la pelota
     public float speedIncrease = 0.2f;  // Aumento de velocidad en cada rebote
     private Rigidbody2D rb;
-    private float minBounceAngle = 0.1f;  // Para evitar rebotes horizontales
-    private bool gameStarted = false;
+    private float minBounceAngle = 0.5f;  // Para evitar rebotes horizontales
+    public bool gameStarted = false;
+    private float timer = 2.0f;
 
     void Start()
     {
@@ -23,13 +24,15 @@ public class BallController : MonoBehaviour
         if (!gameStarted)
         {
             // Coloca la bola sobre la plataforma
-            transform.position = new Vector2(GameObject.Find("Platform").transform.position.x, -2.5f);
-
+            transform.position = new Vector2(GameObject.Find("Platform").transform.position.x, 0.5f);
+            timer -= Time.deltaTime;
+            speed = 5f;
             // Lanza la bola después de 2 segundos
-            if (Time.time > 2f)
+            if (timer < 0.0f)
             {
                 gameStarted = true;
                 rb.velocity = new Vector2(2, 10).normalized * speed; // Dirección inicial
+                timer = 2.0f;
             }
         }
     }
@@ -51,5 +54,6 @@ public class BallController : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, Mathf.Sign(rb.velocity.y) * minBounceAngle).normalized * speed;
             }
         }
+
     }
 }

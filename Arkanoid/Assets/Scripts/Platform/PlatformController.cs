@@ -9,30 +9,29 @@ public class PlatformController : MonoBehaviour
     public float autoSpeed = 8f;           // Velocidad en modo automático
     public bool autoMode = false;          // Alternar entre modo manual y automático
     public GameObject ball;                // Referencia a la pelota
+    public Slider controlSlider;           // Referencia al Slider
+
 
     private float screenHalfWidthInWorldUnits;
+    private float halfPlatformWidth;
 
     void Start()
     {
-
-        // Calculamos la mitad de la pantalla en unidades del mundo para limitar el movimiento
-        float halfPlatformWidth = transform.localScale.x / 2f;
+        halfPlatformWidth = GetComponent<RectTransform>().rect.width / 2;
         screenHalfWidthInWorldUnits = Camera.main.aspect * Camera.main.orthographicSize - halfPlatformWidth;
-
     }
 
 
-    // Mover la plataforma con el ratón
-    void MoveWithMouse()
+    void MoveWithSlider()
     {
-        // Obtener la posición del ratón en coordenadas del mundo
-        float mouseX = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
+        // Obtener el valor del Slider (de 0 a 1)
+        float sliderValue = controlSlider.value;
 
-        // Limitar el movimiento de la plataforma dentro de los límites de la pantalla
-        mouseX = Mathf.Clamp(mouseX, -screenHalfWidthInWorldUnits, screenHalfWidthInWorldUnits);
+        // Calcular la posición horizontal según el valor del Slider
+        float targetX = Mathf.Lerp(-screenHalfWidthInWorldUnits, screenHalfWidthInWorldUnits, sliderValue);
 
-        // Mover la plataforma a la posición del ratón en el eje X
-        transform.position = new Vector2(mouseX, transform.position.y);
+        // Mover la plataforma hacia la nueva posición
+        transform.position = new Vector2(targetX, transform.position.y);
     }
 
     // Modo automático para mover la plataforma siguiendo la pelota
@@ -52,13 +51,15 @@ public class PlatformController : MonoBehaviour
 
             // Aplicar el movimiento a la plataforma
             transform.position = new Vector2(targetX, transform.position.y);
-
+         
 
         }
     }
 
     void Update()
     {
+        halfPlatformWidth = transform.localScale.x/2;
+        screenHalfWidthInWorldUnits = Camera.main.aspect * Camera.main.orthographicSize - halfPlatformWidth;
 
         // Alternar entre modo automático y manual al presionar la tecla A
         if (Input.GetKeyDown(KeyCode.A))
@@ -68,11 +69,13 @@ public class PlatformController : MonoBehaviour
 
         if (!autoMode)  // Modo controlado por el jugador
         {
-            MoveWithMouse();
+            MoveWithSlider();
         }
         else            // Modo automático
         {
             AutoMove();
         }
+
+        //Debug.Log(GetComponent<RectTransform>().offsetMax.x);
     }
 }

@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 26
-  productGUID: a3d445b039bbecd49adc3e78d632b888
+  productGUID: 71194e04828820e42aeb2837761c958f
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: Arkanoid
+  productName: Arkanoid UI
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -687,14 +687,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Arkanoid
+  metroPackageName: Arkanoid UI
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: Arkanoid
+  metroApplicationDescription: Arkanoid UI
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -763,10 +763,10 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 20986117-800d-4e44-b152-8de2339492f1
+  cloudProjectId: 3af002f2-80fc-409e-9bd7-f61132ea9ec6
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Arkanoid 2024-10-17_09-16-00
+  projectName: Arkanoid UI 2024-10-24_11-29-21
   organizationId: unity_025b683c07ef87dfd358
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

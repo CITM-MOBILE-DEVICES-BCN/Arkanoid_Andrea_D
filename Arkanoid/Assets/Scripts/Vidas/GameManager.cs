@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;  // Usamos TextMeshPro
+using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,14 +25,14 @@ public class GameManager : MonoBehaviour
         UpdateLives();
         UpdateScore();
         UpdateHighScore();
-        SpawnBall();  // Generar la primera pelota al iniciar el juego
+        currentBall = GameObject.FindGameObjectWithTag("Ball");
     }
 
     void Update()
     {
         UpdateScore();
         // Comprobar si la pelota ha salido por la parte inferior de la pantalla
-        if (currentBall != null && currentBall.transform.position.y < -5f)
+        if (currentBall != null && currentBall.transform.position.y < -5.0f)
         {
             LoseLife();
         }
@@ -60,20 +61,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Método para generar una nueva pelota
-    void SpawnBall()
-    {
-        currentBall = Instantiate(ballPrefab, platform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-    }
-
     // Método para reiniciar la pelota
     void ResetBall()
     {
-        // Destruir la pelota actual
-        Destroy(currentBall);
-
-        // Generar una nueva pelota en la posición de la plataforma
-        SpawnBall();
+        currentBall.GetComponent<BallController>().gameStarted = false;
     }
 
     // Método para manejar el Game Over

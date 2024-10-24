@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class Brick : MonoBehaviour
 {
-    public int resistance = 1;  // Resistencia del bloque (cuántos golpes puede recibir)
     public Sprite[] damageSprites;  // Array de sprites para mostrar el daño (opcional)
 
     private int currentResistance;  // Resistencia actual del bloque
@@ -13,8 +13,9 @@ public class Brick : MonoBehaviour
 
     void Start()
     {
-        currentResistance = resistance;  // Inicializa la resistencia actual
+        currentResistance = Random.Range(1,4);  // Inicializa la resistencia actual
         spriteRenderer = GetComponent<SpriteRenderer>();  // Obtiene el SpriteRenderer si necesitas cambiar el sprite del bloque dañado
+        getColor();
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -35,7 +36,7 @@ public class Brick : MonoBehaviour
         // Si se han definido sprites para mostrar el daño
         if (damageSprites != null && currentResistance > 0 && currentResistance <= damageSprites.Length)
         {
-            spriteRenderer.sprite = damageSprites[resistance - currentResistance];  // Cambia el sprite
+            spriteRenderer.sprite = damageSprites[currentResistance - currentResistance];  // Cambia el sprite
         }
 
         // Si la resistencia del bloque llega a 0, se destruye
@@ -46,6 +47,7 @@ public class Brick : MonoBehaviour
         }
         else
         {
+            getColor();
             gmScript.points += 1;
         }
     }
@@ -54,6 +56,23 @@ public class Brick : MonoBehaviour
     {
         // Aquí puedes agregar más lógica, como sumar puntos
         Destroy(gameObject);  // Destruye el bloque
+    }
+
+    void getColor()
+    {
+        switch (currentResistance)
+        {
+            case 3:
+                GetComponent<Image>().color = new Color(255, 0, 0, 255);
+                break;
+            case 2:
+                GetComponent<Image>().color = new Color(0, 255, 0, 255);
+                break;
+            case 1:
+                GetComponent<Image>().color = new Color(0, 0, 255, 255);
+                break;
+        }
+        
     }
 
 }
