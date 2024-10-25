@@ -11,9 +11,11 @@ public class BallController : MonoBehaviour
     private float minBounceAngle = 0.5f;  // Para evitar rebotes horizontales
     public bool gameStarted = false;
     private float timer = 2.0f;
+    private AudioSource audioSource;
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
         // Lanzar la pelota en una dirección inicial aleatoria
         rb.velocity = new Vector2(Random.Range(-1f, 1f), 1).normalized * speed;
@@ -42,6 +44,7 @@ public class BallController : MonoBehaviour
     {
         // Aumentar la velocidad después de cada colisión
         speed += speedIncrease;
+        audioSource.Play();
 
         if (rb != null)
         {

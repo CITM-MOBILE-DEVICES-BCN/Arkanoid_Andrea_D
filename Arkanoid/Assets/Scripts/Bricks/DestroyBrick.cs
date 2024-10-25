@@ -44,6 +44,7 @@ public class Brick : MonoBehaviour
         {
             gmScript.points += 10;
             gmScript.currentblocks -= 1;
+            gmScript.PlayBlockSound();
             DestroyBlock();
         }
         else
