@@ -13,11 +13,7 @@ public class SaveLoadSystem : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+   
     public void SaveData(PlayerData data)
     {
         string json = JsonUtility.ToJson(data);

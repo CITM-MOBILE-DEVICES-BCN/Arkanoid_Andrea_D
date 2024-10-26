@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;  // Usamos TextMeshPro
-using UnityEngine.AI;
+using UnityEngine.UI;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -14,15 +15,15 @@ public class GameManager : MonoBehaviour
     public int lives = 3;
     public int points = 0;
     public int highScore = 0;
-    public GameObject ballPrefab;           // Prefab de la pelota
-    public Transform platform;               // La plataforma para resetear su posición
     private GameObject currentBall;          // Referencia a la pelota actual
-    private int currentLevel;
+    public int currentLevel;
     public int currentblocks;
     private SaveLoadSystem SLSystem;
     private int maxLvlIterator = 1;
     private bool newGame;
     private AudioSource audioSource;
+    private GameObject pauseMenu;
+    private List<GameObject> duplicatedBall = new List<GameObject>();
 
     void Start()
     {
@@ -30,6 +31,8 @@ public class GameManager : MonoBehaviour
         currentBall = GameObject.FindGameObjectWithTag("Ball");
         GameObject[] bricks = GameObject.FindGameObjectsWithTag("Brick");
         currentblocks = bricks.Length;
+        pauseMenu = GameObject.Find("PauseMenu");
+        pauseMenu.SetActive(false);
         SLSystem = GetComponent<SaveLoadSystem>();
         CheckGameState();
     }
@@ -47,6 +50,8 @@ public class GameManager : MonoBehaviour
 
         if (currentblocks == 0)
         {
+            RemoveAllDuplicatedObjects();
+
             if (currentLevel == maxLvlIterator)
             {
                 currentLevel = 0;
@@ -58,6 +63,7 @@ public class GameManager : MonoBehaviour
             SaveGame();
             SceneManager.LoadScene("LvlCompleted");
         }
+
     }
 
     // Método para restar una vida y reiniciar la pelota
@@ -175,6 +181,39 @@ public class GameManager : MonoBehaviour
     public void PlayBlockSound()
     {
         audioSource.Play();
+    }
+    public void PauseGame()
+    {
+        pauseMenu.SetActive(true);
+        Time.timeScale = 0f;  // Pausa el juego
+    }
+
+    public void ResumeGame()
+    {
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1f;  // Reanuda el juego
+    }
+    public void PowerUP()
+    {
+        GameObject duplicatedObject = Instantiate(currentBall);
+
+        // Asigna el mismo padre que el objeto original
+        duplicatedObject.transform.SetParent(currentBall.transform.parent);
+        duplicatedObject.transform.localScale = currentBall.transform.localScale;
+        duplicatedObject.GetComponent<Image>().color = new Color(255, 0, 0);
+
+        duplicatedObject.GetComponent<BallController>().gameStarted = false;
+
+        duplicatedBall.Add(duplicatedObject);
+    }
+
+    public void RemoveAllDuplicatedObjects()
+    {
+        foreach (GameObject obj in duplicatedBall)
+        {
+            Destroy(obj); // Destruir el objeto duplicado
+        }
+        duplicatedBall.Clear(); // Limpiar la lista
     }
 
 }

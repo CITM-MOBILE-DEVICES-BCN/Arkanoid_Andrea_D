@@ -26,13 +26,6 @@ public class Menu : MonoBehaviour
         }
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void StartNewGame()
     {
         PlayerData Loaddata = SLSystem.LoadData();
@@ -41,7 +34,7 @@ public class Menu : MonoBehaviour
             PlayerData Savedata = new PlayerData();
             Savedata.lives = 3;
             Savedata.points = 0;
-            Savedata.highScore = Loaddata.highScore;
+            Savedata.highScore = Loaddata.highScore; //Lo único que se guarda
             Savedata.currentlvl = 0;
             Savedata.newGame = true;
             SLSystem.SaveData(Savedata);
@@ -69,6 +62,15 @@ public class Menu : MonoBehaviour
                 SceneManager.LoadScene("Level2");
             }
         }
+    }
+
+    public void QuitGame()
+    {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // Detiene el modo Play en el editor
+        #else
+        Application.Quit(); // Cierra la aplicación en un build
+        #endif
     }
 
 }

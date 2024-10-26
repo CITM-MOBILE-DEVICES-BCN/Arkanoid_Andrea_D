@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class PlatformController : MonoBehaviour
 {
-    public float speed = 10f;              // Velocidad de la plataforma
-    public float autoSpeed = 8f;           // Velocidad en modo automático
     public bool autoMode = false;          // Alternar entre modo manual y automático
     public GameObject ball;                // Referencia a la pelota
     public Slider controlSlider;           // Referencia al Slider
@@ -17,6 +15,7 @@ public class PlatformController : MonoBehaviour
 
     void Start()
     {
+        ball = GameObject.FindGameObjectWithTag("Ball"); //Al no detectar la bola le añadimos esto
         halfPlatformWidth = GetComponent<RectTransform>().rect.width / 2;
         screenHalfWidthInWorldUnits = Camera.main.aspect * Camera.main.orthographicSize - halfPlatformWidth;
     }
@@ -37,14 +36,14 @@ public class PlatformController : MonoBehaviour
     // Modo automático para mover la plataforma siguiendo la pelota
     void AutoMove()
     {
-        ball = GameObject.FindGameObjectWithTag("Ball"); //Al no detectar la bola le añadimos esto
+        
         if (ball != null)
         {
             // Obtener la posición de la pelota
             float ballX = ball.transform.position.x;
 
             // Mover la plataforma hacia la pelota con cierta velocidad
-            float targetX = Mathf.MoveTowards(transform.position.x, ballX, autoSpeed * Time.deltaTime);
+            float targetX = ballX;
 
             // Limitar el movimiento dentro de los límites de la pantalla
             targetX = Mathf.Clamp(targetX, -screenHalfWidthInWorldUnits, screenHalfWidthInWorldUnits);
@@ -61,12 +60,7 @@ public class PlatformController : MonoBehaviour
         halfPlatformWidth = transform.localScale.x/2;
         screenHalfWidthInWorldUnits = Camera.main.aspect * Camera.main.orthographicSize - halfPlatformWidth;
 
-        // Alternar entre modo automático y manual al presionar la tecla A
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            autoMode = !autoMode;
-        }
-
+       
         if (!autoMode)  // Modo controlado por el jugador
         {
             MoveWithSlider();
@@ -75,7 +69,10 @@ public class PlatformController : MonoBehaviour
         {
             AutoMove();
         }
+    }
 
-        //Debug.Log(GetComponent<RectTransform>().offsetMax.x);
+    public void SetAutoMode()
+    {
+        autoMode = !autoMode;
     }
 }
