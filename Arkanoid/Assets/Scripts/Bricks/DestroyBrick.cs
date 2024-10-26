@@ -15,9 +15,9 @@ public class Brick : MonoBehaviour
         currentResistance = Random.Range(1,4);  // Inicializa la resistencia actual
         getColor();
 
-        int random = Random.Range(1, 11);
+        int random = Random.Range(1, 7);
 
-        if (random == 8)
+        if (random == 3)
         {
             power = true;
         }
